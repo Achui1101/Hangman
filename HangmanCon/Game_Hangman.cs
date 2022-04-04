@@ -7,8 +7,21 @@ namespace hangman1
 {
     public class Game_Hangman
     {
+        //
+        // MK: Mit dem `@` vor einem String kann man das schreiben des Logos vereinfachen.
+        //
+        private const string LOGO = @"
+|    | ______ |\       ____  |\    /| ______ |\
+|    | |    | | \   | |    | | \  / | |    | | \   |
+|----| |----| |  \  | |  __  |  \/  | |----| |  \  |
+|    | |    | |   \ | | |  | |      | |    | |   \ |
+|    | |    | |    \| |____| |      | |    | |    \|
+";
         #region Felder
         NeuesSpiel neuesSpiel = new NeuesSpiel();
+        //
+        // MK: Kann erstesmal auch static sein?
+        //
         bool erstesmal = true;
 
         #endregion
@@ -22,17 +35,32 @@ namespace hangman1
         #endregion
 
         #region Spiele Logik
+        //
+        //  MK: starteSpiel ist sehr rekursiv. Das muss eigentlich nicht sein.
+        //  
         public void starteSpiel()
         {
-
+            //
+            //  MK: Der Logo Teil könnte in eine eigene Funktion.
+            //
             #region logo
+            // 
+            //  MK: Hier reichte es 
+            //      if (erstesmal)
+            //  zu schreiben.
+            //
             if (erstesmal == true)
             {
-                Console.WriteLine("|    | ______ |\\       ____  |\\    /| ______ |\\     ");
-                Console.WriteLine("|    | |    | | \\   | |    | | \\  / | |    | | \\   |");
-                Console.WriteLine("|----| |----| |  \\  | |  __  |  \\/  | |----| |  \\  | ");
-                Console.WriteLine("|    | |    | |   \\ | | |  | |      | |    | |   \\ |");
-                Console.WriteLine("|    | |    | |    \\| |____| |      | |    | |    \\|");
+                //
+                //  Mit der oben definierten Konstante Logo ist das dann hier ein bisschen 
+                //  einfacher:
+                //
+                Console.Write(LOGO);
+                // Console.WriteLine("|    | ______ |\\       ____  |\\    /| ______ |\\     ");
+                // Console.WriteLine("|    | |    | | \\   | |    | | \\  / | |    | | \\   |");
+                // Console.WriteLine("|----| |----| |  \\  | |  __  |  \\/  | |----| |  \\  | ");
+                // Console.WriteLine("|    | |    | |   \\ | | |  | |      | |    | |   \\ |");
+                // Console.WriteLine("|    | |    | |    \\| |____| |      | |    | |    \\|");
 
 
                 System.Threading.Thread.Sleep(3000);
@@ -74,9 +102,16 @@ namespace hangman1
             neuesSpiel.Wort = Console.ReadLine();
 
         }
-
+        
         public void spiel()
         {
+            //
+            //  MK: Das ist mir noch ein bisschen zu kompliziert.
+            //  Stell Dir vor, ein Entwickler macht die Spiel-Logik und ein anderer 
+            //  die Oberfläche / das Benutzer-Interface für das Spiel.
+            //  Der Oberflächen-Entwickler muss hier noch zu viel über die interne 
+            //  Arbeitsweise des Spiels wissen.
+            //
             neuesSpiel.erzeugeUnterstriche();
 
             while ((neuesSpiel.ErrateneBuchstaben.SequenceEqual(neuesSpiel.Wort) == false) && !(neuesSpiel.AnzahlFehler > neuesSpiel.AnzahlLegalFehler))

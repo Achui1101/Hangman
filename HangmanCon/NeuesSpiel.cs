@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace hangman1.Controller
 {
+    //
+    //  MK: Hier solltest Du noch einmal in die Kommentare zum ersten Pull-Request 
+    //  schauen.
+    //
     public class NeuesSpiel
     {
         #region Felder
@@ -21,6 +25,15 @@ namespace hangman1.Controller
 
         public int AnzahlFehler {
             get { return anzahlFehler; }
+            //
+            //  MK: Das ist extrem ungewöhnlich. Das set sollte nicht den Wert festlegen.
+            //  Folgender Code würde sonst zu nicht verständlich:
+            //      AnzahlFehler = 7;
+            //      if (AnzahlFehler != 7)
+            //      {
+            //      ...
+            //      }
+            //
             set { anzahlFehler = 0; }
         }
 
