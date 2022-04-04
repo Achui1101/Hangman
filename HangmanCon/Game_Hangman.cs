@@ -7,15 +7,17 @@ namespace hangman1
 {
     public class Game_Hangman
     {
+        #region Felder
         private string wort;
-        string zuErratendesWort;
+        private string zuErratendesWort;
         private int anzahlFehler;
         private int anzahlLegalFehler;
         private char[] errateneBuchstaben;
-        char[] zuErratendesWortArr;
-        char[] bereitsErraten;
+        private char[] zuErratendesWortArr;
+        private char[] bereitsErraten;
+        #endregion
 
-
+        #region Get und Set-Properties
         public string ZuErratendesWort
         {
             get { return zuErratendesWort; }
@@ -53,7 +55,9 @@ namespace hangman1
             get { return bereitsErraten; }
             set { bereitsErraten = value; }
         }
+        #endregion
 
+        #region Konstruktoren
         public Game_Hangman()
         {
             NeuesSpiel neuesSpiel = new NeuesSpiel();
@@ -63,7 +67,9 @@ namespace hangman1
             zuErratendesWort = Wort.ToLower();
             zuErratendesWortArr = ZuErratendesWort.ToCharArray();
         }
+        #endregion
 
+        #region Spiele Logik
         public void starteSpiel()
         {
             char[] stricheArr = new char[zuErratendesWort.Length];
@@ -104,9 +110,9 @@ namespace hangman1
             }
             auswertung();
         }
+        #endregion
 
-
-
+        #region Auswertung
         private void auswertung()
         {
             if (bereitsErraten.SequenceEqual(zuErratendesWortArr))
@@ -124,5 +130,6 @@ namespace hangman1
                 Console.WriteLine("fehler");
             }
         }
+        #endregion
     }
 }

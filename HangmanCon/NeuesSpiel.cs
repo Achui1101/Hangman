@@ -5,12 +5,14 @@ namespace hangman1.Controller
 {
     public class NeuesSpiel
     {
+        #region Felder
         private string wort;
         int anzahlFehler;
         int anzahlLegalFehler;
         char[] errateneBuchstaben;
+        #endregion
 
-
+        #region Get und Set-Properties
         public string Wort {
             get { return wort; }
             set { wort = value; }
@@ -32,7 +34,9 @@ namespace hangman1.Controller
             set { errateneBuchstaben = value; }
         }
 
-       
+        #endregion
+
+        #region Konstruktoren
         public NeuesSpiel()
         {
             wort = WortAusDB();
@@ -40,6 +44,10 @@ namespace hangman1.Controller
             anzahlLegalFehler = 5;
 
         }
+        #endregion
+
+        #region DB-Connection
+
 
         private string WortAusDB()
         {
@@ -48,5 +56,7 @@ namespace hangman1.Controller
             return wortListe[randomObj.Next(0, wortListe.Length)];
         }
 
+
+        #endregion
     }
 }
