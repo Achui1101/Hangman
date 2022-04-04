@@ -8,122 +8,118 @@ namespace hangman1
     public class Game_Hangman
     {
         #region Felder
-        private string wort;
-        private string zuErratendesWort;
-        private int anzahlFehler;
-        private int anzahlLegalFehler;
-        private char[] errateneBuchstaben;
-        private char[] zuErratendesWortArr;
-        private char[] bereitsErraten;
+        NeuesSpiel neuesSpiel = new NeuesSpiel();
+        bool erstesmal = true;
+
         #endregion
 
         #region Get und Set-Properties
-        public string ZuErratendesWort
-        {
-            get { return zuErratendesWort; }
-            set { wort = zuErratendesWort; }
-        }
 
-        public string Wort
-        {
-            get { return wort; }
-            set { wort = value; }
-        }
-
-        public int AnzahlFehler {
-            get { return anzahlFehler; }
-            set { anzahlFehler = value; }
-        }
-
-        public int AnzahlLegalFehler {
-            get { return anzahlLegalFehler; }
-            set { anzahlLegalFehler = value; }
-        }
-        public char[] ErrateneBuchstaben {
-            get { return errateneBuchstaben; }
-            set { errateneBuchstaben = value; }
-        }
-
-        public char[] ZuErratendesWortArr
-        {
-            get { return zuErratendesWortArr; }
-            set { zuErratendesWortArr = value; }
-        }
-
-        public char[] BereitsErraten
-        {
-            get { return bereitsErraten; }
-            set { bereitsErraten = value; }
-        }
         #endregion
 
         #region Konstruktoren
-        public Game_Hangman()
-        {
-            NeuesSpiel neuesSpiel = new NeuesSpiel();
-            wort = neuesSpiel.Wort;
-            anzahlFehler = neuesSpiel.AnzahlFehler;
-            anzahlLegalFehler = neuesSpiel.AnzahlLegalFehler;
-            zuErratendesWort = Wort.ToLower();
-            zuErratendesWortArr = ZuErratendesWort.ToCharArray();
-        }
+
         #endregion
 
         #region Spiele Logik
         public void starteSpiel()
         {
-            char[] stricheArr = new char[zuErratendesWort.Length];
-            for (int i = 0; i < zuErratendesWortArr.Length; i++)
 
+            #region logo
+            if (erstesmal == true)
             {
-                stricheArr[i] = '_';
+                Console.WriteLine("|    | ______ |\\       ____  |\\    /| ______ |\\     ");
+                Console.WriteLine("|    | |    | | \\   | |    | | \\  / | |    | | \\   |");
+                Console.WriteLine("|----| |----| |  \\  | |  __  |  \\/  | |----| |  \\  | ");
+                Console.WriteLine("|    | |    | |   \\ | | |  | |      | |    | |   \\ |");
+                Console.WriteLine("|    | |    | |    \\| |____| |      | |    | |    \\|");
+
+
+                System.Threading.Thread.Sleep(3000);
+                erstesmal = false;
+
             }
+            #endregion
 
-            bereitsErraten = stricheArr;
+            #region modiauswahl
+            Console.Clear();
+            Console.WriteLine("Welchen Modi möchtest du Spielen?");
+            Console.WriteLine("1 : vorgegebenes Wort");
+            Console.WriteLine("2 : eigenes Wort");
 
-            while ((bereitsErraten.SequenceEqual(zuErratendesWortArr) == false) && !(anzahlFehler > anzahlLegalFehler))
+            switch (Console.ReadLine())
             {
-                Console.Clear();
-                char[] bereitsErratenVergl = new char[bereitsErraten.Length];
-
-                Array.Copy(bereitsErraten, bereitsErratenVergl, bereitsErraten.Length);
-                Console.WriteLine(bereitsErraten);
-
-                Console.WriteLine($"Versuche: {(anzahlLegalFehler - anzahlFehler + 1)}");
-
-                Console.WriteLine("Gebe deinen Buchstaben ein:");
-                string buchstabe = Console.ReadLine().ToLower();
-
-                for (int i = 0; i < zuErratendesWortArr.Length; i++)
-                {
-                    if (buchstabe[0] == zuErratendesWortArr[i])
-                    {
-                        bereitsErraten[i] = buchstabe[0];
-
-                    }
-                }
-
-                if (bereitsErratenVergl.SequenceEqual(bereitsErraten))
-                {
-                    anzahlFehler++;
-                }
+                case "1":
+                    spiel();
+                    break;
+                case "2":
+                    eigenesWort();
+                    spiel();
+                    break;
+                default:
+                    Console.WriteLine("Wähle einen Modi aus!");
+                    System.Threading.Thread.Sleep(3000);
+                    starteSpiel();
+                    break;
             }
+            #endregion
+
             auswertung();
         }
-        #endregion
 
-        #region Auswertung
+        public void eigenesWort()
+        {
+            Console.Clear();
+            Console.WriteLine("Was ist dein Wort?");
+            neuesSpiel.Wort = Console.ReadLine();
+
+        }
+
+        public void spiel()
+        {
+            neuesSpiel.erzeugeUnterstriche();
+
+            while ((neuesSpiel.ErrateneBuchstaben.SequenceEqual(neuesSpiel.Wort) == false) && !(neuesSpiel.AnzahlFehler > neuesSpiel.AnzahlLegalFehler))
+            {
+
+                char[] bereitsErratenVergl = new char[neuesSpiel.ErrateneBuchstaben.Length];
+                Array.Copy(neuesSpiel.ErrateneBuchstaben, bereitsErratenVergl, neuesSpiel.ErrateneBuchstaben.Length);
+
+                Console.Clear();
+                Console.WriteLine(neuesSpiel.ErrateneBuchstaben);
+                Console.WriteLine($"Versuche: {(neuesSpiel.AnzahlLegalFehler - neuesSpiel.AnzahlFehler + 1)}");
+                Console.WriteLine("Gebe deinen Buchstaben ein:");
+
+                //suche Buchstaben im Wort
+                try
+                {
+                    neuesSpiel.sucheBuchstaben(Console.ReadLine().ToLower()[0]);
+                }
+                catch
+                {
+                    Console.WriteLine("Gebeden Buchstaben nochmal ein");
+                }
+
+                //erhöhe Fehlerzähler
+                neuesSpiel.erhöheFehlerZaehler(bereitsErratenVergl);
+            }
+        }
+
         private void auswertung()
         {
-            if (bereitsErraten.SequenceEqual(zuErratendesWortArr))
+            if (neuesSpiel.ErrateneBuchstaben.SequenceEqual(neuesSpiel.Wort.ToLower().ToCharArray()))
             {
                 Console.Clear();
-                Console.WriteLine($"Win! Das Wort ist {Wort}! :)");
+                Console.WriteLine($"Win! Das Wort ist {neuesSpiel.Wort}! :)");
+                System.Threading.Thread.Sleep(3000);
+                starteSpiel();
             }
-            else if (anzahlFehler >= anzahlLegalFehler)
+            else if (neuesSpiel.AnzahlFehler >= neuesSpiel.AnzahlLegalFehler)
             {
                 Console.Clear();
-                Console.WriteLine($"Game Over! Das Wort war {Wort}");
+                Console.WriteLine($"Game Over! Das Wort war {neuesSpiel.Wort}");
+                System.Threading.Thread.Sleep(3000);
+                starteSpiel();
             }
             else
             {

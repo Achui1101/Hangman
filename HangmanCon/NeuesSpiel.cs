@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace hangman1.Controller
 {
@@ -39,15 +40,59 @@ namespace hangman1.Controller
         #region Konstruktoren
         public NeuesSpiel()
         {
-            wort = WortAusDB();
+            wort = WortAusDB().ToLower();
+            anzahlFehler = 0;
+            anzahlLegalFehler = 5;
+
+        }
+
+        public NeuesSpiel(string wortIn)
+        {
+            wort = wortIn.ToLower();
             anzahlFehler = 0;
             anzahlLegalFehler = 5;
 
         }
         #endregion
 
-        #region DB-Connection
+        public void sucheBuchstaben(char buchstabe)
+        {
+            for (int i = 0; i < Wort.Length; i++)
+            {
+                if (buchstabe == Wort[i])
+                {
+                    ErrateneBuchstaben[i] = buchstabe;
 
+                }
+            }
+        }
+
+
+        public void erhöheFehlerZaehler(char[] berreitsErraten)
+        {
+            if (berreitsErraten.SequenceEqual(ErrateneBuchstaben))
+            {
+                anzahlFehler++;
+            }
+
+        }
+
+        public char[] erzeugeUnterstriche()
+        {
+            char[] stricheArr = new char[Wort.Length];
+            for (int i = 0; i < Wort.Length; i++)
+
+            {
+                stricheArr[i] = '_';
+            }
+            ErrateneBuchstaben = stricheArr;
+
+            AnzahlFehler = 0;
+
+            return stricheArr;
+        }
+
+        #region DB-Connection
 
         private string WortAusDB()
         {
@@ -56,7 +101,8 @@ namespace hangman1.Controller
             return wortListe[randomObj.Next(0, wortListe.Length)];
         }
 
-
         #endregion
+
+
     }
 }
