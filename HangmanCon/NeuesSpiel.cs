@@ -9,83 +9,44 @@ namespace hangman1.Controller
         int anzahlFehler;
         int anzahlLegalFehler;
         char[] errateneBuchstaben;
-        ArrayList underscores = new ArrayList();
 
-        public string getWort()
-        {
-            return this.wort;
+
+        public string Wort {
+            get { return wort; }
+            set { wort = value; }
         }
 
-        public void setWort(string wortIn)
-        {
-            this.wort = wortIn;
+        public int AnzahlFehler {
+            get { return anzahlFehler; }
+            set { anzahlFehler = 0; }
         }
 
-        public int getAnzahlFehler()
-        {
-            return this.anzahlFehler;
+
+        public int AnzahlLegalFehler {
+            get { return anzahlLegalFehler; }
+            set { anzahlLegalFehler = 6; }
+        }
+        
+        public char[] ErrateneBuchstaben {
+            get { return errateneBuchstaben; }
+            set { errateneBuchstaben = value; }
         }
 
-        public void setAnzahlFehler(int anzahlFehlerIn)
-        {
-            this.anzahlFehler = anzahlFehlerIn;
-        }
-
-        public int getAnzahlLegalFehler()
-        {
-            return this.anzahlLegalFehler;
-        }
-
-        public void setAnzahlLegalFehler(int anzahlLegalFehlerIn)
-        {
-            this.anzahlLegalFehler = anzahlLegalFehlerIn;
-        }
-
-        public char[] getErrateneBuchstaben()
-        {
-            return this.errateneBuchstaben;
-        }
-
-        public void setErrateneBuchstaben(string errateneBuchstabenIn)
-        {
-            this.errateneBuchstaben = errateneBuchstabenIn.ToCharArray();
-        }
-
+       
         public NeuesSpiel()
         {
-            this.wort = setWortAusDB();
-            this.anzahlFehler = 0;
-            this.anzahlLegalFehler = 5;
-            this.underscores.Clear();
-            this.errateneBuchstaben = createUnderscores().ToCharArray();
-
+            wort = WortAusDB();
+            anzahlFehler = 0;
+            anzahlLegalFehler = 5;
 
         }
 
-        private string setWortAusDB()
+        private string WortAusDB()
         {
-            int random;
-
-            Random randomObj = new Random();
-            random = randomObj.Next(0, 6);
-
             string[] wortListe = { "Hallo", "Welt", "Idesis", "Christian", "Noah", "Nina" };
-
-            return wortListe[random];
+            Random randomObj = new Random();
+            return wortListe[randomObj.Next(0, wortListe.Length)];
         }
-
-        private string createUnderscores()
-        {
-            
-            for (int i = 0; i <= this.wort.Length; i++)
-            {
-                underscores.Add('_');
-            }
-
-
-            return underscores.ToString();
-        }
-
 
     }
 }
