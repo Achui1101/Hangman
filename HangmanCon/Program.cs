@@ -1,5 +1,4 @@
-﻿using System;
-using hangman1;
+﻿using hangman1;
 
 namespace HangmanCon
 {

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
+
 
 namespace hangman1.Controller
 {
@@ -8,12 +8,12 @@ namespace hangman1.Controller
     {
         #region Felder
         private string wort;
-        int anzahlFehler;
-        int anzahlLegalFehler;
+        int anzahlFehler = 0;
+        int anzahlLegalFehler = 6;
         char[] errateneBuchstaben;
         #endregion
 
-        #region Get und Set-Properties
+        #region Get und Set
         public string Wort {
             get { return wort; }
             set { wort = value; }
@@ -21,13 +21,13 @@ namespace hangman1.Controller
 
         public int AnzahlFehler {
             get { return anzahlFehler; }
-            set { anzahlFehler = 0; }
+            private set { anzahlFehler = value ; }
         }
 
 
         public int AnzahlLegalFehler {
             get { return anzahlLegalFehler; }
-            set { anzahlLegalFehler = 6; }
+            private set { anzahlLegalFehler = value; }
         }
         
         public char[] ErrateneBuchstaben {
@@ -40,21 +40,12 @@ namespace hangman1.Controller
         #region Konstruktoren
         public NeuesSpiel()
         {
-            wort = WortAusDB().ToLower();
-            anzahlFehler = 0;
-            anzahlLegalFehler = 5;
-
+            Wort = WortAusDB().ToLower();
         }
 
-        public NeuesSpiel(string wortIn)
-        {
-            wort = wortIn.ToLower();
-            anzahlFehler = 0;
-            anzahlLegalFehler = 5;
-
-        }
         #endregion
 
+        #region Spielelogik
         public void sucheBuchstaben(char buchstabe)
         {
             for (int i = 0; i < Wort.Length; i++)
@@ -62,47 +53,39 @@ namespace hangman1.Controller
                 if (buchstabe == Wort[i])
                 {
                     ErrateneBuchstaben[i] = buchstabe;
-
                 }
             }
         }
 
-
-        public void erhöheFehlerZaehler(char[] berreitsErraten)
+        public void erhoeheFehlerZaehler(char[] berreitsErraten)
         {
             if (berreitsErraten.SequenceEqual(ErrateneBuchstaben))
             {
-                anzahlFehler++;
+                AnzahlFehler++;
             }
 
         }
 
-        public char[] erzeugeUnterstriche()
+        public void erzeugeUnterstriche()
         {
-            char[] stricheArr = new char[Wort.Length];
-            for (int i = 0; i < Wort.Length; i++)
 
-            {
-                stricheArr[i] = '_';
-            }
-            ErrateneBuchstaben = stricheArr;
+            string stricheArr = new('_', wort.Length);
+            ErrateneBuchstaben = stricheArr.ToCharArray();
 
             AnzahlFehler = 0;
-
-            return stricheArr;
         }
+        #endregion
 
         #region DB-Connection
 
-        private string WortAusDB()
+        public string WortAusDB()
         {
-            string[] wortListe = { "Hallo", "Welt", "Idesis", "Christian", "Noah", "Nina" };
+            string[] wortListe = { "Hallo", "Welt", "Idesis", "Christian", "Noah", "Nina", "Macbook", "Urlaub", "Lego", "Programmieren", "Fernbedienung", "Gürtel" };
             Random randomObj = new Random();
-            return wortListe[randomObj.Next(0, wortListe.Length)];
+            return wortListe[randomObj.Next(0, wortListe.Length)].ToLower();
         }
 
         #endregion
-
 
     }
 }
